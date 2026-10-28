@@ -68,10 +68,18 @@ python app.py
 The app runs on:
 
 ```text
-http://0.0.0.0:5000
+http://0.0.0.0:5000 (default)
 ```
 
+If PORT is set (for example in `.env`), that value is used instead.
+
 ## Webhook Endpoint
+
+```text
+POST /api/webhook/email
+```
+
+Legacy-compatible route (also supported):
 
 ```text
 POST /webhook/email
@@ -92,7 +100,7 @@ This project includes Vercel configuration in `vercel.json` and exposes the Flas
 After deployment, the webhook URL will be similar to:
 
 ```text
-https://<your-vercel-domain>/webhook/email
+https://<your-vercel-domain>/api/webhook/email
 ```
 
 ## Notes

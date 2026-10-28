@@ -1,7 +1,13 @@
+import os
+
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify
+
+load_dotenv()
 
 app = Flask(__name__)
 
+@app.route('/api/webhook/email', methods=['POST'])
 @app.route('/webhook/email', methods=['POST'])
 def receive_email():
     try:
@@ -25,8 +31,10 @@ def receive_email():
 
     except Exception as e:
         print(f"Error processing email: {e}")
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return jsonify({"status": "error", "message": "Internal server error"}), 500
 
 if __name__ == '__main__':
-    # Local test port is 5000
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Local default is 5000 unless PORT is set in environment.
+    port = int(os.getenv('PORT', '5000'))
+    debug = os.getenv('FLASK_DEBUG', 'false').lower() == 'true'
+    app.run(host='0.0.0.0', port=port, debug=debug)
