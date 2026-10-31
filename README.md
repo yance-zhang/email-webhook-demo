@@ -93,6 +93,16 @@ Example form fields:
 - text
 - html
 
+## Attachment Logging
+
+When attachments are included in the webhook request, the app logs:
+
+- attachment count
+- attachment field name
+- attachment filename
+- attachment content type
+- attachment size in MB
+
 ## Deployment
 
 This project includes Vercel configuration in `vercel.json` and exposes the Flask app through `api/index.py`.

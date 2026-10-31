@@ -19,7 +19,20 @@ def receive_email():
 		text = request.form.get('text')
 		html = request.form.get('html')
 
-		# TODO: Get attachments
+		# Build attachment metadata from uploaded files.
+		attachments = []
+		for field_name, uploaded_file in request.files.items():
+			position = uploaded_file.stream.tell()
+			uploaded_file.stream.seek(0, os.SEEK_END)
+			size = uploaded_file.stream.tell()
+			uploaded_file.stream.seek(position)
+
+			attachments.append({
+				"field": field_name,
+				"filename": uploaded_file.filename,
+				"content_type": uploaded_file.content_type,
+				"size": size,
+			})
 
 		# Print or process the received email information
 		print("--- New email received ---")
@@ -27,6 +40,15 @@ def receive_email():
 		print(f"Recipient: {to}")
 		print(f"Subject: {subject}")
 		print(f"Content (Text): {text}")
+		print(f"Attachment count: {len(attachments)}")
+
+		for index, attachment in enumerate(attachments, start=1):
+			size_mb = attachment['size'] / (1024 * 1024)
+			print(f"Attachment {index}")
+			print(f"  Field: {attachment['field']}")
+			print(f"  Filename: {attachment['filename']}")
+			print(f"  Content-Type: {attachment['content_type']}")
+			print(f"  Size (MB): {size_mb:.4f}")
 
 		return jsonify({"status": "success", "message": "Email received"}), 200
 
